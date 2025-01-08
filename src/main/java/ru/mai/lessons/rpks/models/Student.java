@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -25,9 +24,10 @@ import lombok.ToString;
 public class Student {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_id_seq")
-  @SequenceGenerator(name = "student_id_seq", sequenceName = "student_id_seq", allocationSize = 1)
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_id_seq")
+//  @SequenceGenerator(name = "student_id_seq", sequenceName = "student_id_seq", allocationSize = 1)
   private Long id;
 
   @Column(name = "full_name", nullable = false)

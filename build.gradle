@@ -48,6 +48,7 @@ dependencies {
 	// databases
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.postgresql:postgresql'
+	implementation 'com.h2database:h2:1.3.148'
 
 	// test
 	testImplementation 'org.testcontainers:testcontainers:1.17.6'

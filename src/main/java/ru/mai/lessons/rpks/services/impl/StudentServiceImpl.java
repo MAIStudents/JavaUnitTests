@@ -1,5 +1,6 @@
 package ru.mai.lessons.rpks.services.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
@@ -12,6 +13,7 @@ import ru.mai.lessons.rpks.repositories.StudentRepository;
 import ru.mai.lessons.rpks.services.StudentService;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
