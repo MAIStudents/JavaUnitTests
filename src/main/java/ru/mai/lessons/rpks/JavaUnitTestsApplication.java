@@ -8,5 +8,6 @@ public class JavaUnitTestsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JavaUnitTestsApplication.class, args);
+		//kek
 	}
 }
