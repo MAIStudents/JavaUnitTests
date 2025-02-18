@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  unit_test_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5438:5432"
+
+volumes:
+  db:
