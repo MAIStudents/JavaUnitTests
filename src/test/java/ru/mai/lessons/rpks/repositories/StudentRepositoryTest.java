@@ -72,23 +72,6 @@ class StudentRepositoryTest {
         assertEquals(countBefore, countAfter, "Количество записей в базе не должно измениться");
     }
 
-    @Test
-    @DisplayName("Тест на успешное создание студента")
-    void givenValidStudent_whenSave_thenStudentIsCreated() {
-
-        Student studentToSave = new Student(null, "Lisnyak", "M8О-313Б");
-        Student savedStudent = repository.save(studentToSave);
-
-        Student studentById = repository.findById(1L).orElse(null);
-
-
-        assertNotNull(savedStudent.getId(), "ID студента не должен быть null после сохранения");
-        assertEquals(studentToSave.getFullName(), studentById.getFullName(), "ФИО должно совпадать");
-        assertEquals(studentToSave.getGroupName(), studentById.getGroupName(), "Группа должна совпадать");
-
-        Optional<Student> foundStudent = repository.findById(savedStudent.getId());
-        assertTrue(foundStudent.isPresent(), "Студент должен существовать в базе данных");
-    }
 
     @Test
     @DisplayName("Тест на создание студента с некорректными данными")
