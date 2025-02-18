@@ -64,7 +64,7 @@ class StudentServiceTest {
     }
 
     @Test
-    @DisplayName("Тест на удаление студента по идентификатору")
+    @DisplayName("Тест на удаление студента по идентификатору с позитивным сценарием")
     void givenStudentId_whenDeleteStudent_thenStudentIsDeleted() {
         Long studentId = 1L;
         Student student = new Student(1L, "Lisnyak", "М8О-313Б");
