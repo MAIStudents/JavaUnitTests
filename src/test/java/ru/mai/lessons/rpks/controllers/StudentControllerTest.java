@@ -131,8 +131,8 @@ class StudentControllerTest {
     @DisplayName("Тест на успешное обновление студента")
     void givenValidStudentUpdateRequest_whenUpdateStudent_thenReturnUpdatedStudentResponse() {
 
-        StudentUpdateRequest updateRequest = new StudentUpdateRequest(1L, "Иван", "Иванов");
-        StudentResponse updatedResponse = new StudentResponse(1L, "Иван", "Иванов");
+        StudentUpdateRequest updateRequest = new StudentUpdateRequest(1L, "Lisnyak", "M8О-313Б");
+        StudentResponse updatedResponse = new StudentResponse(1L, "Lisnyak", "M8О-313Б");
 
         when(service.updateStudent(any(StudentUpdateRequest.class))).thenReturn(updatedResponse);
 
