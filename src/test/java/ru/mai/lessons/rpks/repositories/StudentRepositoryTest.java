@@ -34,14 +34,16 @@ class StudentRepositoryTest {
   @DisplayName("Тест на поиск студента по его идентификатору")
   void givenStudent_whenFindById_thenReturnStudent() {
     Student studentToSave = new Student(null, "Domoroschenov", "М8О-411Б");
-    repository.save(studentToSave);
+    Student savedStudent = repository.save(studentToSave);
+    assertNotNull(savedStudent.getId(), "ID студента должен быть назначен");
 
-    Student studentById = repository.findById(1L).orElse(null);
+    Student studentById = repository.findById(savedStudent.getId()).orElse(null);
 
     assertNotNull(studentById);
     assertEquals(studentToSave.getFullName(), studentById.getFullName());
     assertEquals(studentToSave.getGroupName(), studentById.getGroupName());
   }
+
 
   @Test
   @DisplayName("Тест на поиск несуществующего студента")
