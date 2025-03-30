@@ -48,7 +48,7 @@ dependencies {
 	// databases
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.postgresql:postgresql'
-	implementation 'com.h2database:h2:1.3.148'
+	implementation 'com.h2database:h2:2.2.220'
 
 	// test
 	testImplementation 'org.testcontainers:testcontainers:1.17.6'
@@ -56,9 +56,9 @@ dependencies {
 	testImplementation "org.testcontainers:postgresql:1.17.6"
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testImplementation 'io.rest-assured:rest-assured:5.3.0'
-	testCompileOnly "org.projectlombok:lombok:1.18.26"
-	testImplementation 'org.testng:testng:7.1.0'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+	testCompileOnly "org.projectlombok:lombok:1.18.36"
+	testImplementation 'org.testng:testng:7.7.0'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
 tasks.named('test') {
