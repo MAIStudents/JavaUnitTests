@@ -32,32 +32,29 @@ class StudentServiceTest {
   @InjectMocks
   private StudentServiceImpl service;
 
-  private final Long studentID = 1L;
-  private final Student student = new Student(studentID, "Fedorkov", "M8O-311Б");
-  private final Student invalidStudent = new Student(null, null, null);
-  private final Student updatedStudent = new Student(studentID, "Fedorkov Alex", "M8O-311Б");
-  private final StudentResponse studentResponse = new StudentResponse(studentID, "Fedorkov", "M8O-311Б");
-  private final StudentResponse updatedStudentResponse = new StudentResponse(studentID, "Fedorkov Alex", "M8O-311Б");
-  private final StudentCreateRequest createRequest = new StudentCreateRequest("Fedorkov", "M8O-311Б");
-  private final StudentCreateRequest invalidCreateRequest = new StudentCreateRequest(null, null);
-  private final StudentUpdateRequest updateRequest = new StudentUpdateRequest(studentID, "Fedorkov Alex", "M8O-311Б");
-  private final StudentUpdateRequest invalidUpdateRequest = new StudentUpdateRequest(studentID, null, null);
 
   @Test
   @DisplayName("Тест на успешное сохранение студента")
   void givenValidCreateRequest_whenSaveStudent_thenReturnResponse() {
+    StudentCreateRequest createRequest = new StudentCreateRequest("Fedorkov", "M8O-311Б");
+    Student student = new Student(1L, "Fedorkov", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
+
     when(mapper.requestToModel(createRequest)).thenReturn(student);
     when(repository.saveAndFlush(student)).thenReturn(student);
-    when(mapper.modelToResponse(student)).thenReturn(studentResponse);
+    when(mapper.modelToResponse(student)).thenReturn(expectedResponse);
 
     StudentResponse result = service.saveStudent(createRequest);
 
-    assertEquals(studentResponse, result);
+    assertEquals(expectedResponse, result);
   }
 
   @Test
   @DisplayName("Тест на неуспешное сохранение студента ввиду невалидности его данных")
   void givenInvalidCreateRequest_whenSaveStudent_thenThrowException() {
+    StudentCreateRequest invalidCreateRequest = new StudentCreateRequest(null, null);
+    Student invalidStudent = new Student(null, null, null);
+
     when(mapper.requestToModel(invalidCreateRequest)).thenReturn(invalidStudent);
     when(repository.saveAndFlush(invalidStudent)).thenThrow(new IllegalArgumentException());
 
@@ -67,37 +64,47 @@ class StudentServiceTest {
   @Test
   @DisplayName("Тест на поиск студента по его идентификатору")
   void givenStudentId_whenGetStudent_thenReturnStudentResponse() {
-    when(repository.findById(studentID)).thenReturn(Optional.of(student));
-    when(mapper.modelToResponse(student)).thenReturn(studentResponse);
+    Student student = new Student(1L, "Fedorkov", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
 
-    StudentResponse actualResponse = service.getStudent(studentID);
+    when(repository.findById(1L)).thenReturn(Optional.of(student));
+    when(mapper.modelToResponse(student)).thenReturn(expectedResponse);
 
-    assertEquals(studentResponse, actualResponse);
+    StudentResponse actualResponse = service.getStudent(1L);
+
+    assertEquals(expectedResponse, actualResponse);
   }
 
   @Test
   @DisplayName("Тест на поиск несуществующего студента")
   void givenNotExistingStudentId_whenGetStudent_thenThrowException() {
-    when(repository.findById(studentID)).thenReturn(Optional.empty());
+    when(repository.findById(1L)).thenReturn(Optional.empty());
 
-    assertThrows(NotFoundException.class, () -> service.getStudent(studentID));
+    assertThrows(NotFoundException.class, () -> service.getStudent(1L));
   }
 
   @Test
   @DisplayName("Тест на успешное обновление")
   void givenValidUpdateRequest_whenUpdateStudent_thenReturnUpdatedResponse() {
+    StudentUpdateRequest updateRequest = new StudentUpdateRequest(1L, "Fedorkov Alex", "M8O-311Б");
+    Student updatedStudent = new Student(1L, "Fedorkov Alex", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov Alex", "M8O-311Б");
+
     when(mapper.requestToModel(updateRequest)).thenReturn(updatedStudent);
     when(repository.saveAndFlush(updatedStudent)).thenReturn(updatedStudent);
-    when(mapper.modelToResponse(updatedStudent)).thenReturn(updatedStudentResponse);
+    when(mapper.modelToResponse(updatedStudent)).thenReturn(expectedResponse);
 
     StudentResponse result = service.updateStudent(updateRequest);
 
-    assertEquals(updatedStudentResponse, result);
+    assertEquals(expectedResponse, result);
   }
 
   @Test
   @DisplayName("Тест на неуспешное обновление студента")
   void givenInvalidUpdateRequest_whenUpdateStudent_thenThrowException() {
+    StudentUpdateRequest invalidUpdateRequest = new StudentUpdateRequest(1L, null, null);
+    Student invalidStudent = new Student(null, null, null);
+
     when(mapper.requestToModel(invalidUpdateRequest)).thenReturn(invalidStudent);
     when(repository.saveAndFlush(invalidStudent)).thenThrow(new IllegalArgumentException());
 
@@ -107,19 +114,22 @@ class StudentServiceTest {
   @Test
   @DisplayName("Тест на успешное удаление студента")
   void givenExistingStudentId_whenDeleteStudent_thenReturnDeletedResponse() {
-    when(repository.findById(studentID)).thenReturn(Optional.of(student));
-    when(mapper.modelToResponse(student)).thenReturn(studentResponse);
+    Student student = new Student(1L, "Fedorkov", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
 
-    StudentResponse result = service.deleteStudent(studentID);
+    when(repository.findById(1L)).thenReturn(Optional.of(student));
+    when(mapper.modelToResponse(student)).thenReturn(expectedResponse);
 
-    assertEquals(studentResponse, result);
+    StudentResponse result = service.deleteStudent(1L);
+
+    assertEquals(expectedResponse, result);
   }
 
   @Test
   @DisplayName("Тест на неуспешное удаление студента")
   void givenNotExistingId_whenDeleteStudent_thenThrowException() {
-    when(repository.findById(studentID)).thenReturn(Optional.empty());
+    when(repository.findById(1L)).thenReturn(Optional.empty());
 
-    assertThrows(NotFoundException.class, () -> service.deleteStudent(studentID));
+    assertThrows(NotFoundException.class, () -> service.deleteStudent(1L));
   }
 }

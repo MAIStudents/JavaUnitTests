@@ -35,37 +35,35 @@ class StudentControllerTest {
   @MockitoBean
   private StudentService service;
 
-  private final Long studentId = 1L;
-  private final StudentResponse studentResponse = new StudentResponse(studentId, "Fedorkov", "M8O-311Б");
-  private final StudentCreateRequest createRequest = new StudentCreateRequest("Fedorkov", "M8O-311Б");
-  private final StudentCreateRequest invalidCreateRequest = new StudentCreateRequest(null, null);
-  private final StudentUpdateRequest updateRequest = new StudentUpdateRequest(studentId, "Fedorkov Alex", "M8O-311Б");
 
   @Test
   @SneakyThrows
   @DisplayName("Тест на успешное сохранение студента")
   void givenValidRequest_whenSaveStudent_thenReturnOk() {
-    when(service.saveStudent(createRequest)).thenReturn(studentResponse);
+    StudentCreateRequest request = new StudentCreateRequest("Fedorkov", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
+    when(service.saveStudent(request)).thenReturn(expectedResponse);
 
     mockMvc
             .perform(
                     post("/student/save")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(JsonUtils.toJson(createRequest))
+                            .content(JsonUtils.toJson(request))
             )
             .andExpect(status().isOk())
-            .andExpect(content().string(JsonUtils.toJson(studentResponse)));
+            .andExpect(content().string(JsonUtils.toJson(expectedResponse)));
   }
 
   @Test
   @SneakyThrows
   @DisplayName("Тест на неуспешное сохранение студента с невалидными данными")
   void givenInvalidRequest_whenSaveStudent_thenReturnUnprocessableEntity() {
+    StudentCreateRequest invalidRequest = new StudentCreateRequest(null, null);
     mockMvc
             .perform(
                     post("/student/save")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(JsonUtils.toJson(invalidCreateRequest))
+                            .content(JsonUtils.toJson(invalidRequest))
             )
             .andExpect(status().isUnprocessableEntity());
   }
@@ -74,27 +72,28 @@ class StudentControllerTest {
   @SneakyThrows
   @DisplayName("Тест на поиск студента по его идентификатору")
   void givenStudentId_whenGetStudent_thenReturnStudentResponse() {
-    when(service.getStudent(1L)).thenReturn(studentResponse);
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
+    when(service.getStudent(1L)).thenReturn(expectedResponse);
 
     mockMvc
         .perform(
             get("/student/get")
-                .param("id", studentId.toString())
+                .param("id", "1")
         )
         .andExpect(status().isOk())
-        .andExpect(content().string(JsonUtils.toJson(studentResponse)));
+        .andExpect(content().string(JsonUtils.toJson(expectedResponse)));
   }
 
   @Test
   @SneakyThrows
   @DisplayName("Тест на неуспешный поиск студента с несуществующим ID")
   void givenInvalidId_whenGetStudent_thenReturnUnprocessableEntity() {
-    when(service.getStudent(studentId)).thenThrow(NotFoundException.class);
+    when(service.getStudent(1L)).thenThrow(NotFoundException.class);
 
     mockMvc
             .perform(
                     get("/student/get")
-                            .param("id", studentId.toString())
+                            .param("id", "1")
             )
             .andExpect(status().isUnprocessableEntity());
   }
@@ -103,7 +102,9 @@ class StudentControllerTest {
   @SneakyThrows
   @DisplayName("Тест на успешное обновление студента")
   void givenValidRequest_whenUpdateStudent_thenReturnOk() {
-    when(service.updateStudent(updateRequest)).thenReturn(studentResponse);
+    StudentUpdateRequest updateRequest = new StudentUpdateRequest(1L, "Fedorkov Alex", "M8O-311Б");
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
+    when(service.updateStudent(updateRequest)).thenReturn(expectedResponse);
 
     mockMvc
             .perform(
@@ -112,13 +113,14 @@ class StudentControllerTest {
                             .content(JsonUtils.toJson(updateRequest))
             )
             .andExpect(status().isOk())
-            .andExpect(content().string(JsonUtils.toJson(studentResponse)));
+            .andExpect(content().string(JsonUtils.toJson(expectedResponse)));
   }
 
   @Test
   @SneakyThrows
   @DisplayName("Тест на неуспешное обновление несуществующего студента")
   void givenInvalidRequest_whenUpdateStudent_thenReturnUnprocessableEntity() {
+    StudentUpdateRequest updateRequest = new StudentUpdateRequest(1L, "Fedorkov Alex", "M8O-311Б");
     when(service.updateStudent(updateRequest)).thenThrow(NotFoundException.class);
 
     mockMvc
@@ -134,27 +136,28 @@ class StudentControllerTest {
   @SneakyThrows
   @DisplayName("тест на успешное удаление студента")
   void givenValidId_whenDeleteStudent_thenReturnOk() {
-    when(service.deleteStudent(studentId)).thenReturn(studentResponse);
+    StudentResponse expectedResponse = new StudentResponse(1L, "Fedorkov", "M8O-311Б");
+    when(service.deleteStudent(1L)).thenReturn(expectedResponse);
 
     mockMvc
             .perform(
                     delete("/student/delete")
-                            .param("id", studentId.toString())
+                            .param("id", "1")
             )
             .andExpect(status().isOk())
-            .andExpect(content().string(JsonUtils.toJson(studentResponse)));
+            .andExpect(content().string(JsonUtils.toJson(expectedResponse)));
   }
 
   @Test
   @SneakyThrows
   @DisplayName("тест на неуспешное удаление несуществующего студента")
   void givenInvalidId_whenDeleteStudent_thenReturnUnprocessableEntity() {
-    when(service.deleteStudent(studentId)).thenThrow(NotFoundException.class);
+    when(service.deleteStudent(1L)).thenThrow(NotFoundException.class);
 
     mockMvc
             .perform(
                     delete("/student/delete")
-                            .param("id", studentId.toString())
+                            .param("id", "1")
             )
             .andExpect(status().isUnprocessableEntity());
   }
